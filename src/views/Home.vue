@@ -7,7 +7,7 @@ import AppTile from '../components/AppTile.vue';
 
 const APPS = {
   tessio:    { name: 'Tessio',    tagline: 'Tasks',          url: 'https://tessio.tanzillo.ai',    accent: 'var(--fuchsia-600)', sso: true },
-  luca:      { name: 'Luca',      tagline: 'Calendar',       url: 'https://app.luca.tanzillo.ai',  accent: 'var(--teal-600)',    sso: true },
+  luca:      { name: 'Luca',      tagline: 'Calendar',       url: 'https://luca.tanzillo.ai',      accent: 'var(--teal-600)',    sso: false },
   genco:     { name: 'Genco',     tagline: 'Communications', url: 'https://genco.tanzillo.ai',     accent: 'var(--copper-400)',  sso: true },
   apollonia: { name: 'Apollonia', tagline: 'Personal CRM',   url: 'https://apollonia.tanzillo.ai', accent: 'var(--violet-600)',  sso: true },
 };

@@ -9,7 +9,7 @@ const SUB_APP_URLS = {
   tessio:    'https://tessio.tanzillo.ai',
   genco:     'https://genco.tanzillo.ai',
   apollonia: 'https://apollonia.tanzillo.ai',
-  luca:      'https://app.luca.tanzillo.ai',
+  luca:      'https://luca.tanzillo.ai',
 };
 
 const router = useRouter();
@@ -39,7 +39,11 @@ onMounted(async () => {
     let returnTo;
     if (returnApp && SUB_APP_URLS[returnApp]) {
       const base = SUB_APP_URLS[returnApp];
-      returnTo = `${base}/#sso=${ssoFragment(session)}`;
+      // Luca SSR uses .tanzillo.ai cookies set during the bridge step, not
+      // the SSO fragment that the Vue sub-apps consume.
+      returnTo = returnApp === 'luca'
+        ? base
+        : `${base}/#sso=${ssoFragment(session)}`;
     } else {
       const next = route.query.next || '/';
       returnTo = `${import.meta.env.VITE_HUB_URL}${next}`;
