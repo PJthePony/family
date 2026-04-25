@@ -1,10 +1,17 @@
 <script setup>
 defineProps({ tile: { type: Object, required: true } });
+
+const ICONS = {
+  tessio:    '<polyline points="20 6 9 17 4 12"/>',
+  luca:      '<rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/>',
+  genco:     '<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>',
+  apollonia: '<path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>',
+};
 </script>
 
 <template>
   <a class="tile" :href="tile.url" :style="{ '--tile-accent': tile.accent }">
-    <span class="rule" />
+    <span class="tile-icon" v-html="`<svg width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'>${ICONS[tile.key] ?? ''}</svg>`" />
     <span class="name">{{ tile.name }}</span>
     <span class="tagline">{{ tile.tagline }}</span>
   </a>
@@ -33,18 +40,27 @@ defineProps({ tile: { type: Object, required: true } });
   box-shadow: var(--shadow-hang-md);
   border-color: var(--border-strong);
 }
-.rule {
-  display: block;
-  width: 24px;
-  height: 2px;
-  background: var(--tile-accent);
+
+.tile-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--tile-accent) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--tile-accent) 18%, transparent);
+  color: var(--tile-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-1);
 }
+
 .name {
   font-family: var(--font-serif);
   font-size: var(--step-3);
   font-weight: 600;
-  font-variation-settings: 'opsz' 36, 'WONK' 0;
-  letter-spacing: -0.02em;
+  font-variation-settings: 'opsz' 36;
+  letter-spacing: -0.014em;
+  color: var(--text);
 }
 .tagline {
   font-size: var(--step--1);
