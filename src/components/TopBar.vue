@@ -15,7 +15,7 @@ async function signOut() {
 <template>
   <header class="bar">
     <div class="brand">
-      <span class="dot" />
+      <img class="icon" src="/apple-touch-icon.png" alt="" />
       <span class="word">Family</span>
     </div>
     <div class="right">
@@ -43,12 +43,11 @@ async function signOut() {
   align-items: center;
   gap: var(--space-3);
 }
-.dot {
-  width: 10px;
-  height: 10px;
-  border-radius: var(--radius-pill);
-  background: var(--accent);
-  display: inline-block;
+.icon {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-sm);
+  display: block;
 }
 .word {
   font-family: var(--font-serif);
