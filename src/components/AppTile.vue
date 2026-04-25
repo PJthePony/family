@@ -10,20 +10,21 @@ const ICONS = {
 </script>
 
 <template>
-  <a class="tile" :href="tile.url" :style="{ '--tile-accent': tile.accent }">
+  <a class="tile" :href="tile.url">
     <span class="tile-icon" v-html="`<svg width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'>${ICONS[tile.key] ?? ''}</svg>`" />
-    <span class="name">{{ tile.name }}</span>
-    <span class="tagline">{{ tile.tagline }}</span>
+    <div class="tile-text">
+      <span class="name">{{ tile.name }}</span>
+      <span class="tagline">{{ tile.tagline }}</span>
+    </div>
   </a>
 </template>
 
 <style scoped>
 .tile {
-  --tile-accent: var(--accent);
   display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-  padding: var(--space-6);
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
@@ -33,7 +34,6 @@ const ICONS = {
   transition: transform var(--dur-2) var(--ease-out-expo),
               box-shadow var(--dur-3) var(--ease-out-expo),
               border-color var(--dur-2) var(--ease-out-expo);
-  min-height: 144px;
 }
 .tile:hover {
   transform: translateY(-2px);
@@ -45,28 +45,36 @@ const ICONS = {
   width: 36px;
   height: 36px;
   border-radius: 8px;
-  background: color-mix(in srgb, var(--tile-accent) 8%, transparent);
-  border: 1px solid color-mix(in srgb, var(--tile-accent) 18%, transparent);
-  color: var(--tile-accent);
+  background: rgba(212, 36, 111, 0.08);
+  border: 1px solid rgba(212, 36, 111, 0.18);
+  color: var(--accent);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: var(--space-1);
+  flex-shrink: 0;
+}
+
+.tile-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
 }
 
 .name {
   font-family: var(--font-serif);
-  font-size: var(--step-3);
-  font-weight: 600;
-  font-variation-settings: 'opsz' 36;
-  letter-spacing: -0.014em;
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-variation-settings: 'opsz' 24;
+  letter-spacing: -0.02em;
   color: var(--text);
+  line-height: 1.1;
 }
 .tagline {
-  font-size: var(--step--1);
+  font-size: 0.72rem;
   color: var(--text-muted);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  font-weight: 600;
+  font-weight: 700;
 }
 </style>

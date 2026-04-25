@@ -41,7 +41,7 @@ onMounted(async () => {
   <main class="home">
     <section class="hero">
       <div class="eyebrow">The Family</div>
-      <h1 class="display-italic title">Buongiorno.</h1>
+      <h1 class="title">Buongiorno.</h1>
       <p class="lead">Pick your tool.</p>
     </section>
 
@@ -59,8 +59,13 @@ onMounted(async () => {
 }
 .hero { margin-bottom: var(--space-7); }
 .title {
-  font-size: var(--step-5);
-  color: var(--accent);
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-variation-settings: 'opsz' 36;
+  letter-spacing: -0.018em;
+  line-height: 1.1;
+  font-size: 2rem;
+  color: var(--text);
   margin: var(--space-2) 0 var(--space-3);
 }
 .lead { margin: 0; }

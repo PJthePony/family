@@ -34,7 +34,7 @@ async function onSignIn() {
   <main class="login">
     <div class="card">
       <div class="eyebrow">tanzillo.ai</div>
-      <h1 class="display-italic title">The Family</h1>
+      <h1 class="title">The Family</h1>
       <p class="lead">Sign in to your suite.</p>
 
       <button class="btn-google" :disabled="loading" @click="onSignIn">
@@ -76,8 +76,13 @@ async function onSignIn() {
   text-align: center;
 }
 .title {
-  font-size: var(--step-4);
-  color: var(--accent);
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-variation-settings: 'opsz' 36;
+  letter-spacing: -0.018em;
+  line-height: 1.1;
+  font-size: 2rem;
+  color: var(--text);
   margin: var(--space-2) 0 var(--space-4);
 }
 .lead {
