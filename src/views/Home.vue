@@ -25,13 +25,15 @@ onMounted(async () => {
   userEmail.value = session?.user?.email ?? '';
   const fragment = session ? ssoFragment(session) : '';
 
+  const TILE_ORDER = ['tessio', 'genco', 'luca', 'apollonia'];
   const grants = await fetchMyApps();
-  tiles.value = grants
-    .filter((g) => g.app !== 'family' && APPS[g.app])
-    .map((g) => {
-      const app = APPS[g.app];
+  const granted = new Set(grants.map((g) => g.app));
+  tiles.value = TILE_ORDER
+    .filter((key) => granted.has(key) && APPS[key])
+    .map((key) => {
+      const app = APPS[key];
       const url = app.sso && fragment ? `${app.url}/#sso=${fragment}` : app.url;
-      return { key: g.app, ...app, url };
+      return { key, ...app, url };
     });
 });
 </script>
