@@ -5,10 +5,22 @@ import { supabase } from '../lib/supabase.js';
 import { captureGoogleCredentials } from '../lib/google-credentials.js';
 import { bridgeSessionToLuca } from '../lib/luca-bridge.js';
 
+const SUB_APP_URLS = {
+  tessio:    'https://tessio.tanzillo.ai',
+  genco:     'https://genco.tanzillo.ai',
+  apollonia: 'https://apollonia.tanzillo.ai',
+  luca:      'https://luca.tanzillo.ai',
+};
+
 const router = useRouter();
 const route = useRoute();
 const status = ref('Finishing sign-in…');
 const error = ref(null);
+
+function ssoFragment(session) {
+  const payload = { access_token: session.access_token, refresh_token: session.refresh_token };
+  return encodeURIComponent(btoa(JSON.stringify(payload)));
+}
 
 onMounted(async () => {
   try {
@@ -19,9 +31,23 @@ onMounted(async () => {
     status.value = 'Saving your Google connection…';
     await captureGoogleCredentials(session);
 
+    // If a sub-app bounced the user here, send them back there after the
+    // Luca cookie bridge. Otherwise land on the hub home.
+    const returnApp = sessionStorage.getItem('family.return_app');
+    sessionStorage.removeItem('family.return_app');
+
+    let returnTo;
+    if (returnApp && SUB_APP_URLS[returnApp]) {
+      const base = SUB_APP_URLS[returnApp];
+      returnTo = returnApp === 'luca'
+        ? base
+        : `${base}/#sso=${ssoFragment(session)}`;
+    } else {
+      const next = route.query.next || '/';
+      returnTo = `${import.meta.env.VITE_HUB_URL}${next}`;
+    }
+
     status.value = 'Linking sub-apps…';
-    const next = route.query.next || '/';
-    const returnTo = `${import.meta.env.VITE_HUB_URL}${next}`;
     window.location.replace(bridgeSessionToLuca(session, returnTo));
   } catch (e) {
     error.value = e.message;

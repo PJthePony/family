@@ -1,9 +1,21 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
 import { signInWithGoogle } from '../lib/google-credentials.js';
 
+const route = useRoute();
 const loading = ref(false);
 const error = ref(null);
+
+// Sub-apps that bounce here when unauthenticated send ?return_app=tessio.
+// Stash it across the OAuth round-trip so AuthCallback can land the user
+// back on the original sub-app instead of the hub home.
+onMounted(() => {
+  const returnApp = route.query.return_app;
+  if (typeof returnApp === 'string' && returnApp) {
+    sessionStorage.setItem('family.return_app', returnApp);
+  }
+});
 
 async function onSignIn() {
   loading.value = true;
