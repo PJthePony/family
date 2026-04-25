@@ -6,22 +6,33 @@ import TopBar from '../components/TopBar.vue';
 import AppTile from '../components/AppTile.vue';
 
 const APPS = {
-  tessio:    { name: 'Tessio',    tagline: 'Tasks',          url: 'https://tessio.tanzillo.ai',    accent: 'var(--fuchsia-600)' },
-  luca:      { name: 'Luca',      tagline: 'Calendar',       url: 'https://luca.tanzillo.ai',      accent: 'var(--teal-600)' },
-  genco:     { name: 'Genco',     tagline: 'Communications', url: 'https://genco.tanzillo.ai',     accent: 'var(--copper-400)' },
-  apollonia: { name: 'Apollonia', tagline: 'Personal CRM',   url: 'https://apollonia.tanzillo.ai', accent: 'var(--violet-600)' },
+  tessio:    { name: 'Tessio',    tagline: 'Tasks',          url: 'https://tessio.tanzillo.ai',    accent: 'var(--fuchsia-600)', sso: true },
+  luca:      { name: 'Luca',      tagline: 'Calendar',       url: 'https://luca.tanzillo.ai',      accent: 'var(--teal-600)',    sso: false },
+  genco:     { name: 'Genco',     tagline: 'Communications', url: 'https://genco.tanzillo.ai',     accent: 'var(--copper-400)',  sso: true },
+  apollonia: { name: 'Apollonia', tagline: 'Personal CRM',   url: 'https://apollonia.tanzillo.ai', accent: 'var(--violet-600)',  sso: true },
 };
 
 const tiles = ref([]);
 const userEmail = ref('');
 
+function ssoFragment(session) {
+  const payload = { access_token: session.access_token, refresh_token: session.refresh_token };
+  return encodeURIComponent(btoa(JSON.stringify(payload)));
+}
+
 onMounted(async () => {
-  const { data: { user } } = await supabase.auth.getUser();
-  userEmail.value = user?.email ?? '';
+  const { data: { session } } = await supabase.auth.getSession();
+  userEmail.value = session?.user?.email ?? '';
+  const fragment = session ? ssoFragment(session) : '';
+
   const grants = await fetchMyApps();
   tiles.value = grants
     .filter((g) => g.app !== 'family' && APPS[g.app])
-    .map((g) => ({ key: g.app, ...APPS[g.app] }));
+    .map((g) => {
+      const app = APPS[g.app];
+      const url = app.sso && fragment ? `${app.url}/#sso=${fragment}` : app.url;
+      return { key: g.app, ...app, url };
+    });
 });
 </script>
 
